@@ -1,6 +1,6 @@
 from datetime import datetime
 
-dispositivos = []
+
 
 id_dispositivo = 1
 
