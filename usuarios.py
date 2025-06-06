@@ -1,19 +1,27 @@
-usuarios = []
-id_usuario = 1
-usuario_actual = None
+def iniciar_sesion(email_usuario, contraseña_usuario):
+    try:
+        # Verifica que no estén vacíos
+        if email_usuario.strip() == "" or contraseña_usuario.strip() == "":
+            raise ValueError("El email y la contraseña no pueden estar vacíos.")
 
+        # Buscar el usuario
+        usuario_encontrado = next((u for u in lista_de_usuarios if u["Email"] == email_usuario), None)
 
-def iniciar_sesion(email, contraseña):
-    global usuario_actual
+        if not usuario_encontrado:
+            raise ValueError("No se encontró un usuario con ese email.")
 
-    for u in usuarios:
-        if u["email"] == email and u["contraseña"] == contraseña:
-            usuario_actual = u
-            print(f"Bienvenido, {u['nombre']} ({u['rol']})\n")
-            return True
+        # Encriptar la contraseña ingresada para compararla
+        contraseña_encriptada = utilidades.encriptar_contraseña(contraseña_usuario)
 
-    print("Credenciales incorrectas.\n")
-    return False
+        if usuario_encontrado["Contraseña"] != contraseña_encriptada:
+            raise ValueError("La contraseña es incorrecta.")
+
+        print(f"Inicio de sesión exitoso. Bienvenido, {usuario_encontrado['Nombre']}.")
+        return usuario_encontrado
+
+    except ValueError as error:
+        print(f"Error: {error}")
+        return None
 
 
 
