@@ -1,53 +1,94 @@
 import dispositivos
+import usuarios
 
-opcion_menu = ""
+def menu_usuario_estandar():
+    while True:
+        print("""
+=== Menú Usuario Estándar ===
+1. Consultar datos personales
+2. Ver dispositivos
+3. Activar automatización
+0. Cerrar sesión
+""")
+        opcion = input("Seleccione una opción: ")
 
-while True:
-    print(" " * 10)     
-    print("*******************************")
-    print("*                             *")
-    print("*       SmartHome Menu        *")
-    print("*                             *")
-    print("*******************************")
-    print("1. Agregar dispositivo")
-    print("2. Listar dispositivos")
-    print("3. Buscar dispositivo")
-    print("4. Borrar dispositivo")
-    print("5. Activar Automatizacion")  
-    print("6. Salir")  
-    print(" " * 10)                                             
+        match opcion:
+            case "1":
+                usuarios.mostrar_datos_personales()
+            case "2":
+                dispositivos.listar_dispositivos()
+            case "3":
+                dispositivos.automatizacion_encender_luces()
+            case "0":
+                break
+            case _:
+                print("Opción inválida.")
 
-    opcion_menu = input("Seleccione una opción (1-6): ")
+def menu_usuario_admin():
+    while True:
+        print("""
+=== Menú Administrador ===
+1. Ver dispositivos
+2. Crear dispositivo
+3. Eliminar dispositivo
+4. Cambiar rol de un usuario
+5. Consultar automatización
+0. Cerrar sesión
+""")
+        opcion = input("Seleccione una opción: ")
 
-    match opcion_menu:
-        case "1":
-            tipo_dispositivo = input("Ingrese el tipo de dispositivo: ").lower()
-            nombre_dispositivo = input("Ingrese el nombre del dispositivo: ").lower()
-            dispositivos.crear_dispositivo(tipo_dispositivo, nombre_dispositivo)
-            pass
+        match opcion:
+            case "1":
+                dispositivos.listar_dispositivos()
+            case "2":
+                tipo = input("Tipo de dispositivo: ")
+                nombre = input("Nombre del dispositivo: ")
+                dispositivos.crear_dispositivo(tipo, nombre)
+            case "3":
+                nombre = input("Nombre del dispositivo a eliminar: ")
+                dispositivos.eliminar_dispositivo_por_nombre(nombre)
+            case "4":
+                email = input("Email del usuario a cambiar de rol: ")
+                usuarios.cambiar_rol(email)
+            case "5":
+                dispositivos.automatizacion_encender_luces()
+            case "0":
+                break
+            case _:
+                print("Opción inválida.")
 
-        case "2":
-            dispositivos.listar_dispositivos()
-            pass
+def menu_principal():
+    while True:
+        print("""
+=== SmartHome ===
+1. Registrar usuario
+2. Iniciar sesión
+0. Salir
+""")
+        opcion = input("Seleccione una opción: ")
 
-        case "3":
-            nombre_dispositivo = input("Ingrese el nombre del dispositivo a buscar: ")
-            dispositivos.buscar_dispositivo_por_nombre(nombre_dispositivo)
-            pass
+        match opcion:
+            case "1":
+                nombre = input("Nombre: ")
+                apellido = input("Apellido: ")
+                email = input("Email: ")
+                contraseña = input("Contraseña: ")
+                usuarios.registrar_usuario(nombre, apellido, email, contraseña)
 
-        case "4":
-            nombre_dispositivo = input("Ingrese el nombre del dispositivo a eliminar: ")
-            dispositivos.eliminar_dispositivo_por_nombre(nombre_dispositivo)
-            pass
+            case "2":
+                email = input("Email: ")
+                contraseña = input("Contraseña: ")
+                if usuarios.iniciar_sesion(email, contraseña):
+                    if usuarios.usuario_actual["rol"] == "admin":
+                        menu_usuario_admin()
+                    else:
+                        menu_usuario_estandar()
+            case "0":
+                print("¡Hasta luego!")
+                break
+            case _:
+                print("Opción inválida.")
 
-        case "5":
-            dispositivos.automatizacion_encender_luces()
-    
-        case "6":
-            print("Finalizando Aplicacion")
-            break
-        
-        case _:
-            print("Opcion invalida")
+menu_principal()
 
         
