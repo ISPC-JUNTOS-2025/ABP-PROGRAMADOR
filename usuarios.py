@@ -2,9 +2,25 @@ from datetime import datetime
 import utilidades 
 import rol_enum 
 
-lista_de_usuarios = []
+lista_de_usuarios = [{
+            "id usuario": 1,
+            "Nombre": "dana",
+            "Email": "dana@gmail.com",
+            "Contraseña": "+-=¿¡6",
+            "Rol": rol_enum.Roles.ADMINISTRADOR,
+            "Fecha de creacion": "08-06-2025 12:08:01"
+            },
+            {
+            "id usuario": 2,
+            "Nombre": "luciana",
+            "Email": "lu28@gmail.com",
+            "Contraseña": "l&l&-0-¡",
+            "Rol": rol_enum.Roles.USUARIO,
+            "Fecha de creacion": "08-06-2025 13:08:01"
+            }
+        ]
 
-id_usuario = 1
+id_usuario = 3
 
 def registrar_usuario(nombre_de_usuario,email_usuario,contraseña_de_usuario):
     global id_usuario
@@ -33,8 +49,8 @@ def registrar_usuario(nombre_de_usuario,email_usuario,contraseña_de_usuario):
 
 def iniciar_sesion(email_usuario, contraseña_usuario):
     try:
-        if contraseña_usuario == ' ' or contraseña_usuario == '':
-            raise ValueError("El email y la contraseña no pueden estar vacíos.")
+        if contraseña_usuario == ' ' or email_usuario == '':
+            raise ValueError("El email o la contraseña no pueden estar vacíos.")
         
         utilidades.verificar_email(email_usuario)
 
@@ -43,18 +59,21 @@ def iniciar_sesion(email_usuario, contraseña_usuario):
             if usuario["Email"] == email_usuario:
                 usuario_encontrado = usuario
 
-        contraseña_desencriptada = utilidades.desencriptar_contraseña(usuario_encontrado["Contraseña"])
+        if not usuario_encontrado:
+            raise ValueError("Email o contraseña incorrectos")
 
-        if usuario_encontrado["Contraseña"] != contraseña_desencriptada:
-            raise ValueError("El email o contraseña es incorrecta.")
+        contraseña_encriptada_ingresada = utilidades.encriptar_contraseña(contraseña_usuario)
+
+        if usuario_encontrado["Contraseña"] != contraseña_encriptada_ingresada:
+            raise ValueError("Email o contraseña incorrectos")
 
         print(f"Inicio de sesión exitoso. Bienvenido, {usuario_encontrado['Nombre']}.")
-         
         return usuario_encontrado
 
     except ValueError as error:
         print(f"Error: {error}")
         return None
+    
 
 def consultar_datos_personales(email_usuario):
     try:
@@ -63,8 +82,8 @@ def consultar_datos_personales(email_usuario):
                 print("\n--- DATOS PERSONALES ---")
                 print(f"Nombre: {usuario['Nombre']}")
                 print(f"Email: {usuario['Email']}")
-                return
-        raise ValueError("No se encontro un usuario con ese email")
+                return 
+        raise ValueError("No se encontro un usuario con ese email") 
     except ValueError as error:
         print(f"Error: {error}")
 

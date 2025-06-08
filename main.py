@@ -1,6 +1,7 @@
 import usuarios
 import dispositivos
 import automatizaciones
+import rol_enum
 
 def menu_usuario(user):
     while True:
@@ -17,10 +18,10 @@ def menu_usuario(user):
             case "2":
                 automatizaciones.menu_automatizaciones()
             case "3":
-                dispositivos.listardispositivos()
+                dispositivos.listar_dispositivos()
             case "4":
                 break
-            case :
+            case _:
                 print("Opción inválida")
 
 def menu_admin():
@@ -38,11 +39,11 @@ def menu_admin():
             case "2":
                 menu_gestion_dispositivos()
             case "3":
-                nuevo_rol = input("Ingrese el nombre del usuario: ")
-                usuarios.cambiar_rol_usuario(nuevorol)
+                nombre_usuario = input("Ingrese el nombre del usuario: ")
+                usuarios.cambiar_rol_usuario(nombre_usuario)
             case "4":
                 break
-            case :
+            case _:
                 print("Opción inválida")
 
 
@@ -68,9 +69,42 @@ def menu_gestion_dispositivos():
                 dispositivos.buscar_dispositivo_por_nombre(nombre)
             case "4":
                 nombre = input("Nombre a eliminar: ")
-                dispositivos.eliminar_dispositivo_pornombre(nombre)
+                dispositivos.eliminar_dispositivo_por_nombre(nombre)
             case "5":
                 break
-            case :
+            case _:
                 print("Opción inválida.")
 
+def main():
+    while True:
+        print("\n=== SmartHome ===")
+        print("1. Registrarse")
+        print("2. Iniciar sesión")
+        print("3. Salir")
+        opcion = input("Elige una opción: ")
+
+        match opcion:
+            case "1":
+                nombre = input("Nombre: ")
+                email = input("Email: ")
+                contraseña = input("Contraseña: ")
+                usuarios.registrar_usuario(nombre, email, contraseña)
+
+            case "2":
+                email = input("Email: ")
+                contraseña = input("Contraseña: ")
+                user = usuarios.iniciar_sesion(email, contraseña)
+                if user:
+                    if user["Rol"] == rol_enum.Roles.ADMINISTRADOR:
+                        menu_admin()
+                    else:
+                        menu_usuario(user)
+
+            case "3":
+                print("Saliendo del sistema. ¡Hasta luego!")
+                break
+
+            case _:
+                print("Opción inválida.")
+
+main()
