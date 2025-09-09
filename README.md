@@ -6,4 +6,3 @@
 #### 3-) Axel Bonaldi - email: axel.bonaldi@gmail.com - Usuario Git: axelbonaldi
 #### 4-) Maria Luciana Ferreyra - email: maria.lu.ferreyra@gmail.com - Usuario Git: Luciana Ferreyra
 #### 5-) Fernando Agustin Perez - email: aguss.97@outlook.com - Usuario Git: bobony97
-#### 6-) Dana Karina Valverde - email: danakvalverde@gmail.com - Usuario Git: DanaValverde 
